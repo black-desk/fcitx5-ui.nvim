@@ -66,6 +66,11 @@ InputContext:connect_signal(
   "UpdateClientSideUI"
 )
 
+InputContext:connect_signal(
+  sighdlr.ForwardKey,
+  "ForwardKey"
+)
+
 ret, err = InputContext:SetCapability(consts.PluginCapabilities)
 
 assert(ret, tostring(err))
@@ -122,11 +127,9 @@ M.process_key = function(input)
   end
 
   if accept then
-    ctx:iteration(true)
+    ctx:iteration()
     vim.v.char = ''
   end
-
-  ctx:iteration()
 
   return accept
 end

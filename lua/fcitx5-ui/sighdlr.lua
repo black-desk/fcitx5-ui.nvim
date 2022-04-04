@@ -1,5 +1,6 @@
 local M = {}
 
+local consts = require("fcitx5-ui.consts")
 local win = -1
 local buf = vim.api.nvim_create_buf(false, true)
 
@@ -12,6 +13,23 @@ M.CommitString = function (_, str)
   vim.schedule(function()
     vim.api.nvim_buf_set_text(0, r-1, c, r-1, c, {str})
     vim.api.nvim_win_set_cursor(0, {r, c + #str})
+  end)
+end
+
+M.ForwardKey = function (_, key, state, release)
+  if release then
+    return
+  end
+  key = string.char(key)
+  if state == consts.FcitxKeyState.shift then
+    key = "\\<S-"..key..">"
+  elseif state == consts.FcitxKeyState.alt then
+    key = "\\<M-"..key..">"
+  elseif state == consts.FcitxKeyState.ctrl then
+    key = "\\<C-"..key..">"
+  end
+  vim.schedule(function ()
+    vim.api.nvim_feedkeys(key, 'm', true)
   end)
 end
 
