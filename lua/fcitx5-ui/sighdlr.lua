@@ -50,14 +50,25 @@ M.UpdateClientSideUI = function (_, preedit, cursor, aux_up, aux_down, candidate
 
   local candidates_ = {}
   for _, v in ipairs(candidates) do
-    table.insert(candidates_, v[1]..v[2])
+    table.insert(candidates_, string.sub(v[1],1,#v[1]-1)..v[2])
   end
   candidates_ = table.concat(candidates_," ")
 
+  local has_content = #preedit>0 and #candidates_>0
+  candidates_ = "<|" .. candidates_ .. "|>"
+  if not has_prev then
+    candidates_ = string.sub(candidates_, 3, #candidates_)
+  end
+
+  if not has_next then
+    candidates_ = string.sub(candidates_, 1, #candidates_-2)
+  end
+
   local lines = {
     " " .. preedit .. " ",
-    " " .. candidates_ .. " ",
+    candidates_,
   }
+
 
   local height = 2
   local width = 0
@@ -72,7 +83,7 @@ M.UpdateClientSideUI = function (_, preedit, cursor, aux_up, aux_down, candidate
       vim.api.nvim_win_close(win,true)
       win = -1
     end
-    if width > 2 then
+    if has_content then
       win = vim.api.nvim_open_win(buf, false, {
         relative = 'cursor',
         width = width,
