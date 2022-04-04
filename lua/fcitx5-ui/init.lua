@@ -4,14 +4,20 @@ local consts = require("fcitx5-ui.consts")
 local utils = require("fcitx5-ui.utils")
 local sighdlr = require("fcitx5-ui.sighdlr")
 
+local function get_trigger()
+  -- TODO: Read [Hotkey/TriggerKeys] from ~/.config/fcitx5/config
+  return {'<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl }
+end
+
 local default_cfg = {
-  keymap = {
-    up = '<Up>',
-    down = '<Down>',
-    left = '<Left>',
-    right = '<Right>',
-    backspace = '<BS>',
-    enter = '<CR>',
+  keys = {
+    trigger = get_trigger(),
+    up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
+    down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
+    left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },
+    right = { '<Right>', consts.FcitxKey.right, consts.FcitxKeyState.no },
+    enter = { '<CR>', consts.FcitxKey.enter, consts.FcitxKeyState.no },
+    backspace = { '<BS>', consts.FcitxKey.backspace, consts.FcitxKeyState.no },
   }
 }
 
@@ -64,18 +70,6 @@ ret, err = InputContext:SetCapability(consts.PluginCapabilities)
 
 assert(ret, tostring(err))
 
-local specialKeys = {
-  -- TODO: Read [Hotkey/TriggerKeys] from ~/.config/fcitx5/config
-  trigger   = {consts.FcitxKey.space, consts.FcitxKeyState.ctrl},
-  up        = {consts.FcitxKey.up, consts.FcitxKeyState.no},
-  down      = {consts.FcitxKey.down, consts.FcitxKeyState.no},
-  left      = {consts.FcitxKey.left, consts.FcitxKeyState.no},
-  right     = {consts.FcitxKey.right, consts.FcitxKeyState.no},
-  backspace = {consts.FcitxKey.backspace, consts.FcitxKeyState.no},
-  enter     = {consts.FcitxKey.enter, consts.FcitxKeyState.no},
-}
-
-
 local function sendFcitxTriggerKey()
   M.process_key("trigger")
 end
@@ -90,31 +84,12 @@ local function setupAutocmds()
 end
 
 local function setupKeyMaps()
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.up,
-    "luaeval(\"require'fcitx5-ui'.process_key('up')\") ? \"\\<Ignore>\" : \"\\<Up>\"",
-    {buffer = 0, expr = true})
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.down,
-    "luaeval(\"require'fcitx5-ui'.process_key('down')\") ? \"\\<Ignore>\" : \"\\<Down>\"",
-    {buffer = 0, expr = true})
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.left,
-    "luaeval(\"require'fcitx5-ui'.process_key('left')\") ? \"\\<Ignore>\" : \"\\<Left>\"",
-    {buffer = 0, expr = true})
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.right,
-    "luaeval(\"require'fcitx5-ui'.process_key('right')\") ? \"\\<Ignore>\" : \"\\<Right>\"",
-    {buffer = 0, expr = true})
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.backspace,
-    "luaeval(\"require'fcitx5-ui'.process_key('backspace')\") ? \"\\<Ignore>\" : \"\\<BS>\"",
-    {buffer = 0, expr = true})
-  vim.keymap.set(
-    {'i'}, effective_cfg.keymap.enter,
-    "luaeval(\"require'fcitx5-ui'.process_key('enter')\") ? \"\\<Ignore>\" : \"\\<CR>\"",
-    {buffer = 0, expr = true})
-  -- TODO: tab / s-tab
+  for key, value in pairs(effective_cfg.keys) do
+    vim.keymap.set(
+      {'i'}, value[1],
+      "luaeval(\"require'fcitx5-ui'.process_key('" .. key .. "')\") ? \"\\<Ignore>\" : \"\\" .. value[1] .. "\"",
+      {buffer = 0, expr = true})
+  end
 end
 
 local function unsetAutocmds()
@@ -125,39 +100,35 @@ local function unsetAutocmds()
 end
 
 local function unsetKeyMaps()
-  vim.keymap.del( {'i'}, effective_cfg.keymap.up, {buffer = 0})
-  vim.keymap.del( {'i'}, effective_cfg.keymap.down, {buffer = 0})
-  vim.keymap.del( {'i'}, effective_cfg.keymap.left, {buffer = 0})
-  vim.keymap.del( {'i'}, effective_cfg.keymap.right, {buffer = 0})
-  vim.keymap.del( {'i'}, effective_cfg.keymap.backspace, {buffer = 0})
+  for _, value in pairs(effective_cfg.keys) do
+    vim.keymap.del( {'i'}, value[1], {buffer = 0})
+  end
 end
 
 -- Never call this out side plugin.
 M.process_key = function(input)
   local state
-  if specialKeys[input] then
-    input, state = unpack(specialKeys[input])
+  if effective_cfg.keys[input] then
+    _, input, state = unpack(effective_cfg.keys[input])
   else
     input = string.byte(input)
     state = consts.FcitxKeyState.no
   end
 
   local accept
-  
   accept, err = InputContext:ProcessKeyEvent(input, 0, state, false, 0)
-
   if accept == nil then
     error(tostring(err))
   end
 
-
   if accept then
     ctx:iteration(true)
     vim.v.char = ''
-    return true
-  else
-    return false
   end
+
+  ctx:iteration()
+
+  return accept
 end
 
 M.activate = function()
