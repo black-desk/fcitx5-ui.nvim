@@ -15,12 +15,20 @@ M.CommitString = function (_, str)
   end)
 end
 
-M.UpdateClientSideUI = function (_, preedits, cursor, aux_up, aux_down, candidates, candidate_index, layout_hint, has_prev, has_next)
-  local preedits_ = {}
-  for _, v in ipairs(preedits) do
-    table.insert(preedits_, v[1])
+M.UpdateClientSideUI = function (_, preedit, cursor, aux_up, aux_down, candidates, candidate_index, layout_hint, has_prev, has_next)
+  if table.getn(preedit) > 0 then
+    preedit = preedit[1][1]
+  else
+    preedit = ""
   end
-  preedits_ = table.concat(preedits_," ")
+
+  if cursor >= 0 then
+    local _tmp = cursor
+    if string.sub(preedit,_tmp,_tmp) == " " then
+      _tmp = _tmp -1
+    end
+    preedit = string.sub(preedit, 0, _tmp).."|"..string.sub(preedit, cursor+1, #preedit)
+  end
 
   local candidates_ = {}
   for _, v in ipairs(candidates) do
@@ -29,15 +37,15 @@ M.UpdateClientSideUI = function (_, preedits, cursor, aux_up, aux_down, candidat
   candidates_ = table.concat(candidates_," ")
 
   local lines = {
-    preedits_,
-    candidates_
+    " " .. preedit .. " ",
+    " " .. candidates_ .. " ",
   }
 
   local height = 2
   local width = 0
 
   for _, s in ipairs(lines) do
-    width = math.max(width, #s)
+    width = math.max(width, vim.api.nvim_strwidth(s))
   end
 
   vim.schedule(function ()
@@ -46,7 +54,7 @@ M.UpdateClientSideUI = function (_, preedits, cursor, aux_up, aux_down, candidat
       vim.api.nvim_win_close(win,true)
       win = -1
     end
-    if width > 0 then
+    if width > 2 then
       win = vim.api.nvim_open_win(buf, false, {
         relative = 'cursor',
         width = width,
