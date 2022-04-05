@@ -17,6 +17,8 @@ require('packer').use(
 )
 ```
 
+You **MUST** config fcitx to `ShareInputState=No`
+
 ## Use
 
 `require'fcitx5-ui'.activate()` to activate first input method, this will bring you to insert mode.
