@@ -4,8 +4,8 @@ local consts = require("fcitx5-ui.consts")
 local win = -1
 local buf = vim.api.nvim_create_buf(false, true)
 
-M.CurrentIM = function()
-  -- TODO: lualine
+M.CurrentIM = function(_,name, cname, lan)
+  require("fcitx5-ui").setCurrentIM(cname)
 end
 
 M.CommitString = function (_, str)

@@ -51,10 +51,10 @@ local InputContext = p.Proxy:new({
   path = path,
 })
 
--- InputContext.connect_signal(
-  -- sighdlr.CurrentIM,
-  -- "CurrentIM"
--- )
+InputContext:connect_signal(
+  sighdlr.CurrentIM,
+  "CurrentIM"
+)
 
 InputContext:connect_signal(
   sighdlr.CommitString,
@@ -151,6 +151,16 @@ end
 M.setup = function (config)
   -- TODO: Implement
   effective_cfg = vim.tbl_extend(config, default_cfg)
+end
+
+local im = ""
+
+M.setCurrentIM = function(str)
+  im = str
+end
+
+M.getCurrentIM = function ()
+  return im
 end
 
 return M
