@@ -149,7 +149,6 @@ M.deactivate = function()
 end
 
 M.setup = function (config)
-  -- TODO: Implement
   effective_cfg = vim.tbl_extend(config, default_cfg)
 end
 
