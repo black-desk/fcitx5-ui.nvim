@@ -149,7 +149,7 @@ M.deactivate = function()
 end
 
 M.setup = function (config)
-  effective_cfg = vim.tbl_extend(config, default_cfg)
+  effective_cfg = vim.tbl_extend("keep", config, default_cfg)
 end
 
 local im = ""
