@@ -1,6 +1,7 @@
 # Fcitx5 UI inside neovim
 
-**WARNING** This program is in very early stage and may break or change frequently!
+**WARNING** This program is in very early stage and may break or change
+frequently!
 
 This is a fcitx5 user interface for neovim written in lua.
 
@@ -19,11 +20,18 @@ require('packer').use(
 
 You **MUST** config fcitx to `ShareInputState=No`
 
+**NOTE**:
+
+1. `lgi` and `dbus_proxy` needs `gobject-introspection`
+2. packer.nvim need `unzip` to install lua rocks
+
 ## Use
 
-`require'fcitx5-ui'.activate()` to activate first input method, this will bring you to insert mode.
+`require'fcitx5-ui'.activate()` to activate first input method, this will bring
+you to insert mode.
 
-`require'fcitx5-ui'.deactivate()` to deactivate input method, this will bring you back to normal mode.
+`require'fcitx5-ui'.deactivate()` to deactivate input method, this will bring
+you back to normal mode.
 
 leave insert mode will invoke `deactivate()`
 
@@ -62,8 +70,8 @@ local default_cfg = {
 every key in `keys` is a table contains 3 entries:
 
   - keycode, (check `:help keycodes`), means the key you want to map.
-  - [FcitxKey](https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h) 
-  - [FcitxKeyState](https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysym.h)
+  - [FcitxKey][link1]
+  - [FcitxKeyState][link2]
 
 FcitxKeyState and FcitxKey define the key event you want to send to fcitx.
 
@@ -88,6 +96,11 @@ require('lualine').setup(cfg)
 
 ## Thanks
 
-[fcitx5.nvim](https://github.com/tonyfettes/fcitx5.nvim)
+[fcitx5.nvim][link3]
 
-[lua-dbus_proxy](https://github.com/stefano-m/lua-dbus_proxy)
+[lua-dbus_proxy][link4]
+
+[link1]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h
+[link2]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysym.h
+[link3]: https://github.com/tonyfettes/fcitx5.nvim
+[link4]: https://github.com/stefano-m/lua-dbus_proxy
