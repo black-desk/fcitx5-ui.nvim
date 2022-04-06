@@ -1,7 +1,6 @@
 local M = {}
 
 local consts = require("fcitx5-ui.consts")
-local utils = require("fcitx5-ui.utils")
 local sighdlr = require("fcitx5-ui.sighdlr")
 
 local function get_trigger()
@@ -37,7 +36,7 @@ local InputMethod1 = p.Proxy:new({
 
 local ret, err = InputMethod1:CreateInputContext({
   { "program", consts.PluginName },
-  { "display", consts.PluginName .. "-" .. utils.random_string(10) },
+  { "display", consts.PluginName },
 })
 
 ret = assert(ret, tostring(err))
