@@ -34,72 +34,72 @@ M.ForwardKey = function (_, key, state, release)
 end
 
 M.UpdateClientSideUI = function (_, preedit, cursor, aux_up, aux_down, candidates, candidate_index, layout_hint, has_prev, has_next)
-  if table.getn(preedit) > 0 then
+  if table.getn(preedit) > 0 and table.getn(candidates) > 0 then
     preedit = preedit[1][1]
-  else
-    preedit = ""
-  end
-
-  if cursor >= 0 then
-    local _tmp = cursor
-    if string.sub(preedit,_tmp,_tmp) == " " then
-      _tmp = _tmp -1
+    if cursor >= 0 then
+      local _tmp = cursor
+      if string.sub(preedit,_tmp,_tmp) == " " then _tmp = _tmp -1 end
+      preedit = string.sub(preedit, 0, _tmp).."|"..string.sub(preedit, cursor+1, #preedit)
     end
-    preedit = string.sub(preedit, 0, _tmp).."|"..string.sub(preedit, cursor+1, #preedit)
-  end
 
-  local candidates_ = {}
-  for _, v in ipairs(candidates) do
-    table.insert(candidates_, string.sub(v[1],1,#v[1]-1)..v[2])
-  end
-  candidates_ = table.concat(candidates_," ")
+    local prev = "<| " if not has_prev then prev = string.rep(" ", #prev) end
+    local next = "|>" if not has_next then next = string.rep(" ", #next) end
 
-  local has_content = #preedit>0 and #candidates_>0
-  candidates_ = "<|" .. candidates_ .. "|>"
-  if not has_prev then
-    candidates_ = string.sub(candidates_, 3, #candidates_)
-  end
+    local candidates_ = { prev }
+    for _, v in ipairs(candidates) do
+      table.insert(candidates_, string.sub(v[1],1,#v[1]-1)..v[2].." ")
+    end
+    table.insert(candidates_, next)
 
-  if not has_next then
-    candidates_ = string.sub(candidates_, 1, #candidates_-2)
-  end
+    local pre = candidates_[candidate_index+1]
+    candidates_[candidate_index+1] = string.sub(pre, 1, #pre-1)
 
-  local lines = {
-    " " .. preedit .. " ",
-    candidates_,
-  }
+    local select = candidates_[candidate_index+2]
+    candidates_[candidate_index+2] = "["..string.sub(select,1,#select-1).."]"
 
-
-  local height = 2
-  local width = 0
-
-  for _, s in ipairs(lines) do
-    width = math.max(width, vim.api.nvim_strwidth(s))
-  end
-
-  vim.schedule(function ()
-    vim.api.nvim_buf_set_lines(buf, 0, 2, false, lines)
-    local config = {
-      relative = 'cursor',
-      width = width,
-      height = height,
-      row = 1,
-      col = 0,
-      style = 'minimal'
+    candidates_ = table.concat(candidates_)
+    local lines = {
+      "   " .. preedit,
+      candidates_,
     }
-    if has_content then
+
+    local height = 2
+    local width = 0
+
+    for _, s in ipairs(lines) do
+      width = math.max(width, vim.api.nvim_strwidth(s))
+    end
+
+    vim.schedule(function ()
+      vim.api.nvim_buf_set_lines(buf, 0, 2, false, lines)
+      local config = {
+        relative = 'cursor',
+        width = width,
+        height = height,
+        row = 1,
+        col = -3,
+        style = 'minimal'
+      }
       if win == -1 then
         win = vim.api.nvim_open_win(buf, false, config)
       else
         vim.api.nvim_win_set_config(win, config)
       end
-    else
+    end)
+  else
+    vim.schedule(function ()
       if win ~= -1 then
         vim.api.nvim_win_close(win, true)
         win = -1
       end
-    end
-  end)
+    end)
+  end
+
+
+
+
+
+
 end
 
 return M

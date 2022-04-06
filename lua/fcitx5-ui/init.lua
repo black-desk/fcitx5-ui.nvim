@@ -17,6 +17,8 @@ local default_cfg = {
     right = { '<Right>', consts.FcitxKey.right, consts.FcitxKeyState.no },
     enter = { '<CR>', consts.FcitxKey.enter, consts.FcitxKeyState.no },
     backspace = { '<BS>', consts.FcitxKey.backspace, consts.FcitxKeyState.no },
+    tab = { '<Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.no },
+    stab = { '<S-Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.shift },
   }
 }
 

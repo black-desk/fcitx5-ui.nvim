@@ -16,6 +16,7 @@ return {
     right     = 0xff53,
     down      = 0xff54,
     enter     = 0xff0d,
+    tab       = 0xfe20,
   },
   FcitxKeyState = {
     no    = 0,
