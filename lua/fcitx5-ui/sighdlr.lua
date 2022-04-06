@@ -79,19 +79,25 @@ M.UpdateClientSideUI = function (_, preedit, cursor, aux_up, aux_down, candidate
 
   vim.schedule(function ()
     vim.api.nvim_buf_set_lines(buf, 0, 2, false, lines)
-    if win ~= -1 then
-      vim.api.nvim_win_close(win,true)
-      win = -1
-    end
+    local config = {
+      relative = 'cursor',
+      width = width,
+      height = height,
+      row = 1,
+      col = 0,
+      style = 'minimal'
+    }
     if has_content then
-      win = vim.api.nvim_open_win(buf, false, {
-        relative = 'cursor',
-        width = width,
-        height = height,
-        row = 1,
-        col = 0,
-        style = 'minimal'
-      })
+      if win == -1 then
+        win = vim.api.nvim_open_win(buf, false, config)
+      else
+        vim.api.nvim_win_set_config(win, config)
+      end
+    else
+      if win ~= -1 then
+        vim.api.nvim_win_close(win, true)
+        win = -1
+      end
     end
   end)
 end
