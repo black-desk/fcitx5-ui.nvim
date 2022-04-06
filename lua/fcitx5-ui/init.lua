@@ -82,7 +82,8 @@ local function setupAutocmds()
   vim.cmd[[
     aug fcitx5_ui
       au InsertCharPre <buffer> lua require'fcitx5-ui'.process_key(vim.v.char)
-      au InsertLeave * lua require'fcitx5-ui'.deactivate()
+      au InsertLeave * lua require'fcitx5-ui'.reset()
+      au WinLeave * lua require'fcitx5-ui'.reset()
     aug END
   ]]
 end
@@ -92,7 +93,7 @@ local function setupKeyMaps()
     vim.keymap.set(
       {'i'}, value[1],
       "luaeval(\"require'fcitx5-ui'.process_key('" .. key .. "')\") ? \"\\<Ignore>\" : \"\\" .. value[1] .. "\"",
-      {buffer = 0, expr = true})
+      {buffer = true, expr = true})
   end
 end
 
@@ -105,7 +106,7 @@ end
 
 local function unsetKeyMaps()
   for _, value in pairs(effective_cfg.keys) do
-    vim.keymap.del( {'i'}, value[1], {buffer = 0})
+    vim.keymap.del( {'i'}, value[1], {buffer = true})
   end
 end
 
@@ -133,22 +134,44 @@ M.process_key = function(input)
   return accept
 end
 
+local activated = false;
+
+M.toggle = function ()
+  if activated then
+    M.deactivate()
+  else
+    M.activate()
+  end
+end
+
 M.activate = function()
+  if activated then
+    return
+  end
   sendFcitxTriggerKey()
   setupAutocmds()
   setupKeyMaps()
   vim.cmd([[ startinsert ]])
+  activated = true
 end
 
 M.deactivate = function()
+  if not activated then
+    return
+  end
   sendFcitxTriggerKey()
   unsetAutocmds()
   unsetKeyMaps()
-  vim.cmd([[ stopinsert ]])
+  activated = false
 end
 
 M.setup = function (config)
   effective_cfg = vim.tbl_extend("keep", config, default_cfg)
+end
+
+M.reset = function ()
+  InputContext:Reset()
+  ctx:iteration()
 end
 
 local im = ""

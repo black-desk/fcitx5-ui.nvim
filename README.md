@@ -33,8 +33,6 @@ you to insert mode.
 `require'fcitx5-ui'.deactivate()` to deactivate input method, this will bring
 you back to normal mode.
 
-leave insert mode will invoke `deactivate()`
-
 `require'fcitx5-ui'.getCurrentIM()` to get current IM.
 
 `require'fcitx5-ui'.setup(config)` to config this plugin.
