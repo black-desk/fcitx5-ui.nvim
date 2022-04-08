@@ -30,8 +30,9 @@ You **MUST** config fcitx to `ShareInputState=No`
 `require'fcitx5-ui'.activate()` to activate first input method, this will bring
 you to insert mode.
 
-`require'fcitx5-ui'.deactivate()` to deactivate input method, this will bring
-you back to normal mode.
+`require'fcitx5-ui'.deactivate()` to deactivate input method.
+
+`require'fcitx5-ui'.toggle()` to toggle between activate/deactivate.
 
 `require'fcitx5-ui'.getCurrentIM()` to get current IM.
 
@@ -75,6 +76,21 @@ FcitxKeyState and FcitxKey define the key event you want to send to fcitx.
 
 `trigger` **MUST** be set to one of `[Hotkey/TriggerKeys]` in your fcitx config.
 
+You can pass config of your own to `setup` function like this:
+
+```lua
+require'fcitx5-ui'.setup{
+  keys = {
+    up = {'<C-k>', consts.FcitxKey.up, consts.FcitxKeyState.no}
+  }
+}
+```
+
+Above config means that fcitx5 will recive a up key, when you press `<C-k>` in
+insert mode of neovim with input method activating.
+
+you might want to map `:lua require"fcitx5-ui".toggle()` also, check
+[this][link5]
 ### lualine
 
 ```lua
@@ -102,3 +118,4 @@ require('lualine').setup(cfg)
 [link2]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysym.h
 [link3]: https://github.com/tonyfettes/fcitx5.nvim
 [link4]: https://github.com/stefano-m/lua-dbus_proxy
+[link5]: https://github.com/black-desk/dotfiles/blob/e0af17d86b7719bac6d3c936b9ebdf4ffc3c22af/private_dot_config/nvim/lua/plugins-d/_fcitx.lua#L6-L28
