@@ -1,16 +1,20 @@
-local M = {}
-
 local consts = require("fcitx5-ui.consts")
+local utils = require("fcitx5-ui.utils")
 local sighdlr = require("fcitx5-ui.sighdlr")
 
-local function get_trigger()
-  -- TODO: Read [Hotkey/TriggerKeys] from ~/.config/fcitx5/config
-  return {'<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl }
-end
+local M = {
+  activate = utils.warning,
+  deactivate = utils.warning,
+  getCurrentIM = utils.warning,
+  process_key = utils.warning,
+  reset = utils.warning,
+  setCurrentIM = utils.warning,
+  toggle = utils.warning,
+}
 
 local default_cfg = {
   keys = {
-    trigger = get_trigger(),
+    trigger = {'<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
     up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
     down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
     left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },
@@ -19,15 +23,35 @@ local default_cfg = {
     backspace = { '<BS>', consts.FcitxKey.backspace, consts.FcitxKeyState.no },
     tab = { '<Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.no },
     stab = { '<S-Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.shift },
-  }
+  },
+  ignore_module_missing_warning = false,
+  prev = "<|",
+  next = "|>",
 }
 
-local effective_cfg = default_cfg
+local ecfg = default_cfg -- effective config
 
--- TODO: check session bus exists
+M.setup = function (config)
+  ecfg = vim.tbl_extend("keep", config, default_cfg)
+end
 
-local ctx = require('lgi').GLib.MainLoop():get_context()
-local p = require("dbus_proxy")
+M.config = function ()
+  return ecfg
+end
+
+local lgi = utils.prequire('lgi')
+if not lgi and not ecfg.ignore_module_missing_warning then
+  utils.set_msg('lua module "lgi" not found.')
+  return M
+end
+
+local ctx = lgi.GLib.MainLoop():get_context()
+
+local p = utils.prequire("dbus_proxy")
+if not p and not ecfg.ignore_module_missing_warning then
+  utils.set_msg('lua module "dbus_proxy" not found.')
+  return M
+end
 
 local InputMethod1 = p.Proxy:new({
   bus = p.Bus.SESSION,
@@ -91,7 +115,7 @@ local function setupAutocmds()
 end
 
 local function setupKeyMaps()
-  for key, value in pairs(effective_cfg.keys) do
+  for key, value in pairs(ecfg.keys) do
     vim.keymap.set(
       {'i'}, value[1],
       "luaeval(\"require'fcitx5-ui'.process_key('" .. key .. "')\") ? \"\\<Ignore>\" : \"\\" .. value[1] .. "\"",
@@ -107,7 +131,7 @@ local function unsetAutocmds()
 end
 
 local function unsetKeyMaps()
-  for _, value in pairs(effective_cfg.keys) do
+  for _, value in pairs(ecfg.keys) do
     vim.keymap.del( {'i'}, value[1], {buffer = true})
   end
 end
@@ -115,8 +139,8 @@ end
 -- Never call this out side plugin.
 M.process_key = function(input)
   local state
-  if effective_cfg.keys[input] then
-    _, input, state = unpack(effective_cfg.keys[input])
+  if ecfg.keys[input] then
+    _, input, state = unpack(ecfg.keys[input])
   else
     input = string.byte(input)
     state = consts.FcitxKeyState.no
@@ -144,6 +168,7 @@ M.toggle = function ()
   else
     M.activate()
   end
+  M.reset()
 end
 
 M.activate = function()
@@ -165,10 +190,6 @@ M.deactivate = function()
   unsetAutocmds()
   unsetKeyMaps()
   activated = false
-end
-
-M.setup = function (config)
-  effective_cfg = vim.tbl_extend("keep", config, default_cfg)
 end
 
 M.reset = function ()
