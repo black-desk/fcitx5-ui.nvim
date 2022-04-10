@@ -7,7 +7,7 @@ This is a fcitx5 user interface for neovim written in lua.
 
 Basical fcitx5 functions seems work after a simple setup.
 
-![demo](../assets/demo.gif)
+![demo](./assets/screenshot.png)
 
 ## Install
 
