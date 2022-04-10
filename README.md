@@ -24,6 +24,8 @@ You **MUST** config fcitx to `ShareInputState=No`
 
 1. `lgi` and `dbus_proxy` needs `gobject-introspection`
 2. packer.nvim need `unzip` to install lua rocks
+3. You will recive a message (`:messages`) if any dependency is missing.
+   `ignore_module_missing_warning = true` will disable this warning message.
 
 ## Use
 
@@ -49,20 +51,21 @@ default config is:
 ```lua
 local consts = require("fcitx5-ui.consts")
 
-local function get_trigger()
-  return {'<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl }
-end
-
 local default_cfg = {
   keys = {
-    trigger = get_trigger(),
+    trigger = { '<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
     up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
     down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
     left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },
     right = { '<Right>', consts.FcitxKey.right, consts.FcitxKeyState.no },
     enter = { '<CR>', consts.FcitxKey.enter, consts.FcitxKeyState.no },
     backspace = { '<BS>', consts.FcitxKey.backspace, consts.FcitxKeyState.no },
-  }
+    tab = { '<Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.no },
+    stab = { '<S-Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.shift },
+  },
+  ignore_module_missing_warning = false,
+  prev = "<|",
+  next = "|>",
 }
 ```
 
@@ -89,8 +92,9 @@ require'fcitx5-ui'.setup{
 Above config means that fcitx5 will recive a up key, when you press `<C-k>` in
 insert mode of neovim with input method activating.
 
-you might want to map `:lua require"fcitx5-ui".toggle()` also, check
-[this][link5]
+You might want to map `:lua require"fcitx5-ui".toggle()` also, check
+[this][link5].
+
 ### lualine
 
 ```lua
@@ -104,9 +108,7 @@ require('lualine').setup(cfg)
 
 ## TODO
 
-- [ ] support switch between input methods
-- [ ] auto config keymaps
-- [ ] support vertical candidates layout
+- [ ] fix update client side ui signal issue
 
 ## Thanks
 
@@ -114,8 +116,11 @@ require('lualine').setup(cfg)
 
 [lua-dbus_proxy][link4]
 
+[fcitx.vim][link6]
+
 [link1]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h
 [link2]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysym.h
 [link3]: https://github.com/tonyfettes/fcitx5.nvim
 [link4]: https://github.com/stefano-m/lua-dbus_proxy
 [link5]: https://github.com/black-desk/dotfiles/blob/e0af17d86b7719bac6d3c936b9ebdf4ffc3c22af/private_dot_config/nvim/lua/plugins-d/_fcitx.lua#L6-L28
+[link6]: https://github.com/lilydjwg/fcitx.vim
