@@ -153,7 +153,7 @@ M.process_key = function(input)
   end
 
   if accept then
-    ctx:iteration()
+    ctx:iteration(true)
     vim.v.char = ''
   end
 
