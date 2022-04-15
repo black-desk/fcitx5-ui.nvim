@@ -42,10 +42,6 @@ you to insert mode.
 
 ## Config
 
-### Map
-
-This plugin needs you to config some key maps.
-
 default config is:
 
 ```lua
@@ -66,10 +62,21 @@ local default_cfg = {
   ignore_module_missing_warning = false,
   prev = "<|",
   next = "|>",
+  update = 50,
 }
 ```
 
-every key in `keys` is a table contains 3 entries:
+### `update`
+
+I don't know how to stear a new thread from a lua script. So I use vim's `timer`
+to recive dbus signals from fcitx5 daemon. `update` is the interval of this
+timer. Default update time is set to 50ms.
+
+### Map
+
+This plugin needs you to config some key maps.
+
+Every key in `keys` is a table contains 3 entries:
 
   - keycode, (check `:help keycodes`), means the key you want to map.
   - [FcitxKey][link1]

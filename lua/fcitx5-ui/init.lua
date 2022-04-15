@@ -14,7 +14,7 @@ local M = {
 
 local default_cfg = {
   keys = {
-    trigger = {'<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
+    trigger = { '<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
     up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
     down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
     left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },
@@ -27,15 +27,16 @@ local default_cfg = {
   ignore_module_missing_warning = false,
   prev = "<|",
   next = "|>",
+  update = 50,
 }
 
 local ecfg = default_cfg -- effective config
 
-M.setup = function (config)
+M.setup = function(config)
   ecfg = vim.tbl_extend("keep", config, default_cfg)
 end
 
-M.config = function ()
+M.config = function()
   return ecfg
 end
 
@@ -105,34 +106,44 @@ local function sendFcitxTriggerKey()
 end
 
 local function setupAutocmds()
-  vim.cmd[[
+  local cmd = string.format([[
     aug fcitx5_ui
       au InsertCharPre <buffer> lua require'fcitx5-ui'.process_key(vim.v.char)
       au InsertLeave * lua require'fcitx5-ui'.reset()
       au WinLeave * lua require'fcitx5-ui'.reset()
     aug END
-  ]]
+    function! UpdateFcitx5UI(timer)
+      lua require'fcitx5-ui'.iteration()
+    endfunction
+
+    let g:fcitx5_ui_timer = timer_start(%d, 'UpdateFcitx5UI',{'repeat':-1})
+  ]], ecfg.update)
+  vim.cmd(cmd)
 end
 
 local function setupKeyMaps()
   for key, value in pairs(ecfg.keys) do
     vim.keymap.set(
-      {'i'}, value[1],
+      { 'i' }, value[1],
       "luaeval(\"require'fcitx5-ui'.process_key('" .. key .. "')\") ? \"\\<Ignore>\" : \"\\" .. value[1] .. "\"",
-      {buffer = true, expr = true})
+      { buffer = true, expr = true })
   end
 end
 
 local function unsetAutocmds()
-  vim.cmd[[
+  vim.cmd [[
     au!  fcitx5_ui
     aug! fcitx5_ui
+    call timer_stop(fcitx5_ui_timer)
   ]]
+
+  vim.cmd [[
+    ]]
 end
 
 local function unsetKeyMaps()
   for _, value in pairs(ecfg.keys) do
-    vim.keymap.del( {'i'}, value[1], {buffer = true})
+    vim.keymap.del({ 'i' }, value[1], { buffer = true })
   end
 end
 
@@ -153,7 +164,6 @@ M.process_key = function(input)
   end
 
   if accept then
-    ctx:iteration(true)
     vim.v.char = ''
   end
 
@@ -162,7 +172,7 @@ end
 
 local activated = false;
 
-M.toggle = function ()
+M.toggle = function()
   if activated then
     M.deactivate()
   else
@@ -192,9 +202,9 @@ M.deactivate = function()
   activated = false
 end
 
-M.reset = function ()
+M.reset = function()
   InputContext:Reset()
-  ctx:iteration()
+  sighdlr.UpdateClientSideUI({}, {}, -1, {}, {}, {}, 0, 0, false, false)
 end
 
 local im = ""
@@ -203,8 +213,12 @@ M.setCurrentIM = function(str)
   im = str
 end
 
-M.getCurrentIM = function ()
+M.getCurrentIM = function()
   return im
+end
+
+M.iteration = function()
+  ctx:iteration()
 end
 
 return M
