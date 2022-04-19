@@ -136,9 +136,6 @@ local function unsetAutocmds()
     aug! fcitx5_ui
     call timer_stop(fcitx5_ui_timer)
   ]]
-
-  vim.cmd [[
-    ]]
 end
 
 local function unsetKeyMaps()
@@ -200,6 +197,7 @@ M.deactivate = function()
   unsetAutocmds()
   unsetKeyMaps()
   activated = false
+  M.setCurrentIM("")
 end
 
 M.reset = function()
