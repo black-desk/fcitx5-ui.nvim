@@ -132,8 +132,8 @@ end
 
 local function unsetAutocmds()
   vim.cmd [[
-    au!  fcitx5_ui
-    aug! fcitx5_ui
+    silent! au!  fcitx5_ui
+    silent! aug! fcitx5_ui
     call timer_stop(fcitx5_ui_timer)
   ]]
 end
