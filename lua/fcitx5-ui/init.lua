@@ -123,10 +123,10 @@ end
 
 local function setupKeyMaps()
   for key, value in pairs(ecfg.keys) do
-    vim.keymap.set(
-      { 'i' }, value[1],
+    vim.api.nvim_buf_set_keymap(
+      0, 'i', value[1],
       "luaeval(\"require'fcitx5-ui'.process_key('" .. key .. "')\") ? \"\\<Ignore>\" : \"\\" .. value[1] .. "\"",
-      { buffer = true, expr = true })
+      { expr = true, replace_keycodes = false })
   end
 end
 
