@@ -13,6 +13,7 @@ M.warning = function ()
   if #msg ~=0 then
     print("fcitx5-ui.nvim not load: " .. msg)
   end
+  return ""
 end
 
 M.set_msg = function (m)
