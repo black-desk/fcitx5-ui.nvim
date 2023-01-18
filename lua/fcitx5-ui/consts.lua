@@ -23,5 +23,6 @@ return {
     shift = 1,
     ctrl  = 4,
     alt   = 8,
+    super = 64,
   }
 }
