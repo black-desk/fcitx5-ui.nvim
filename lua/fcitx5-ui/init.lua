@@ -33,7 +33,7 @@ local default_cfg = {
 local ecfg = default_cfg -- effective config
 
 M.setup = function(config)
-  ecfg = vim.tbl_extend("keep", config, default_cfg)
+  ecfg = vim.tbl_deep_extend("keep", config, default_cfg)
 end
 
 M.config = function()
