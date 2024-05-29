@@ -24,6 +24,7 @@ local M = {
 local default_cfg = {
         keys = {
                 trigger = { '<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
+                punctuation = { '<C-.>', consts.FcitxKey.period, consts.FcitxKeyState.ctrl },
                 up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
                 down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
                 left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },

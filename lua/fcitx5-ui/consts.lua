@@ -9,6 +9,7 @@ return {
 	FcitxInputMethod1DBusInterface  = "org.fcitx.Fcitx.InputMethod1",
 	FcitxInputContext1DBusInterface = "org.fcitx.Fcitx.InputContext1",
   FcitxKey = {
+    period    = 0x002e,
     backspace = 0xff08,
     space     = 0x0020,
     left      = 0xff51,
