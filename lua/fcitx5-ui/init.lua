@@ -226,7 +226,7 @@ M.getCurrentIM = function()
 end
 
 M.displayCurrentIM = function()
-        local mode = vim.fn.mode()[0]
+        local mode = vim.fn.mode():sub(1, 1)
         if mode ~= 'i' and mode ~= 'R' then
                 return ""
         end
