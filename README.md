@@ -44,8 +44,8 @@ return {
 
 ## Use
 
-`require'fcitx5-ui'.activate()` to activate first input method, this will bring
-you to insert mode.
+`require'fcitx5-ui'.activate()` to activate first input method, then you can use
+`:startinsert` to enter insert mode.
 
 `require'fcitx5-ui'.deactivate()` to deactivate input method.
 

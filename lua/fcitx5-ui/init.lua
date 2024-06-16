@@ -195,7 +195,6 @@ M.activate = function()
         sendFcitxTriggerKey()
         setupAutocmds()
         setupKeyMaps()
-        vim.cmd([[ startinsert ]])
         activated = true
 end
 
