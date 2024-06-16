@@ -15,6 +15,7 @@ local M = {
         activate = utils.warning,
         deactivate = utils.warning,
         getCurrentIM = utils.warning,
+        displayCurrentIM = utils.warning,
         process_key = utils.warning,
         reset = utils.warning,
         setCurrentIM = utils.warning,
@@ -222,6 +223,14 @@ M.setCurrentIM = function(str)
 end
 
 M.getCurrentIM = function()
+        return im
+end
+
+M.displayCurrentIM = function()
+        local mode = vim.fn.mode()[0]
+        if mode ~= 'i' and mode ~= 'R' then
+                return ""
+        end
         return im
 end
 
