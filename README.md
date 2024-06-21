@@ -11,7 +11,38 @@ Basical fcitx5 functions seems work after a simple setup.
 
 ## Install
 
-For packer.nvim:
+### rocks.nvim
+
+#### Command style
+
+```vim
+:Rocks install fcitx5-ui.nvim
+```
+
+#### Declare style
+
+`~/.config/nvim/rocks.toml`:
+
+```toml
+[plugins]
+"fcitx5-ui.nvim" = "scm"
+```
+
+Then
+
+```vim
+:Rocks sync
+```
+
+or:
+
+```sh
+$ luarocks --lua-version 5.1 --local --tree ~/.local/share/nvim/rocks install fcitx5-ui.nvim
+# ~/.local/share/nvim/rocks is the default rocks tree path
+# you can change it according to your vim.g.rocks_nvim.rocks_path
+```
+
+### packer.nvim
 
 ``` lua
 require('packer').use(
@@ -20,7 +51,7 @@ require('packer').use(
 )
 ```
 
-For lazy.nvim:
+### lazy.nvim
 
 ``` lua
 return {
