@@ -16,4 +16,3 @@ jobs:
           version: scm
           dependencies: |
             dbus_proxy
-            lgi
