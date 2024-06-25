@@ -9,10 +9,8 @@ M.CurrentIM = function(_, name, cname, lan)
 end
 
 M.CommitString = function(_, str)
-  local r, c = unpack(vim.api.nvim_win_get_cursor(0))
   vim.schedule(function()
-    vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { str })
-    vim.api.nvim_win_set_cursor(0, { r, c + #str })
+    vim.api.nvim_feedkeys(str, 't', true)
   end)
 end
 
