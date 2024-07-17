@@ -1,7 +1,7 @@
 # Fcitx5 UI inside neovim
 
-**WARNING** This program is in very early stage and may break or change
-frequently\!
+**WARNING**
+This program is in very early stage and may break or change frequently\!
 
 This is a fcitx5 user interface for neovim written in lua.
 
@@ -56,12 +56,6 @@ require('packer').use(
 ``` lua
 return {
   "black-desk/fcitx5-ui.nvim",
-  build = "" ..
-    "pip3 install --user hererocks && " ..
-    "python3 -mhererocks ${XDG_DATA_HOME:-$HOME/.local/share}/nvim/fcitx5-ui/ -l5.1 -r3.0.0 && " ..
-    "source ${XDG_DATA_HOME:-$HOME/.local/share}/nvim/fcitx5-ui/bin/activate && " ..
-    "luarocks install lgi && " ..
-    "luarocks install dbus_proxy",
   config = config,
 }
 ```
@@ -75,8 +69,8 @@ return {
 
 ## Use
 
-`require'fcitx5-ui'.activate()` to activate first input method, then you can use
-`:startinsert` to enter insert mode.
+`require'fcitx5-ui'.activate()` to activate first input method,
+then you can use `:startinsert` to enter insert mode.
 
 `require'fcitx5-ui'.deactivate()` to deactivate input method.
 
