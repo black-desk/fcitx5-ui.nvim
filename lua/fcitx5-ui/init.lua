@@ -2,17 +2,6 @@ local consts = require("fcitx5-ui.consts")
 local utils = require("fcitx5-ui.utils")
 local sighdlr = require("fcitx5-ui.sighdlr")
 
-if utils.prequire("lazy") then
-        package.path = "" ..
-            vim.fn.stdpath("data") .. "/fcitx5-ui/share/lua/5.1/?.lua;" ..
-            vim.fn.stdpath("data") .. "/fcitx5-ui/share/lua/5.1/?/init.lua;" ..
-            package.path
-
-        package.cpath = "" ..
-            vim.fn.stdpath("data") .. "/fcitx5-ui/lib/lua/5.1/?.so;" ..
-            package.cpath
-end
-
 local M = {
         activate = utils.warning,
         deactivate = utils.warning,
