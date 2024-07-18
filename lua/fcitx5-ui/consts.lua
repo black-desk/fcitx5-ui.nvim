@@ -2,7 +2,8 @@ local FcitxUserInterfaceCapabilityClientSideInputPanel = 2 ^ 39
 local FcitxUserInterfaceCapabilityKeyEventOrderFix = 2 ^ 37
 
 return {
-        PluginName                      = "fcitx5uinvim",
+        FcitxInputContextProgram        = "fcitx5-ui.nvim",
+        FcitxInputContextDisplay        = "fcitx5-ui.nvim",
         PluginCapabilities              =
             FcitxUserInterfaceCapabilityClientSideInputPanel +
             FcitxUserInterfaceCapabilityKeyEventOrderFix,
@@ -26,5 +27,10 @@ return {
                 ctrl  = 4,
                 alt   = 8,
                 super = 64,
+        },
+        FcitxCandidateLayoutHint        = {
+                NotSet = 0,
+                Vertical = 1,
+                Horizontal = 2,
         }
 }
