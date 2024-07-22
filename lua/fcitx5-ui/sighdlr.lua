@@ -36,10 +36,8 @@ M.UpdateClientSideUI = function(_, preedit, cursor, aux_up, aux_down, candidates
         local function getstr(aux)
                 if table.getn(aux) > 0 then
                         return aux[1][1]
-                else
-                        return ""
                 end
-                return aux
+                return ""
         end
 
         aux_up               = getstr(aux_up)
