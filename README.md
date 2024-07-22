@@ -56,7 +56,6 @@ require('packer').use(
 ``` lua
 return {
   "black-desk/fcitx5-ui.nvim",
-  config = config,
 }
 ```
 
@@ -64,21 +63,20 @@ return {
 
 1. `lgi` and `dbus_proxy` needs `gobject-introspection` to build;
 2. packer.nvim need `unzip` to install lua rocks;
-3. You will recive a message (`:messages`) if any dependency is missing.
-   `ignore_module_missing_warning = true` will disable this warning message.
 
 ## Use
 
-`require'fcitx5-ui'.activate()` to activate first input method,
-then you can use `:startinsert` to enter insert mode.
+- `require'fcitx5-ui'.activate()` to activate first input method,
+  then you can use `:startinsert` to enter insert mode.
 
-`require'fcitx5-ui'.deactivate()` to deactivate input method.
+- `require'fcitx5-ui'.deactivate()` to deactivate input method.
 
-`require'fcitx5-ui'.toggle()` to toggle between activate/deactivate.
+- `require'fcitx5-ui'.toggle()` to toggle between activate/deactivate.
 
-`require'fcitx5-ui'.getCurrentIM()` to get current IM.
+- `require'fcitx5-ui'.get_current_input_method()` to
+  get current input method name.
 
-`require'fcitx5-ui'.setup(config)` to config this plugin.
+- `require'fcitx5-ui'.setup(config)` to config this plugin.
 
 ## Config
 
@@ -87,27 +85,59 @@ default config is:
 ``` lua
 local consts = require("fcitx5-ui.consts")
 
-local default_cfg = {
-  keys = {
-    trigger = { '<C-Space>', consts.FcitxKey.space, consts.FcitxKeyState.ctrl },
-    up = { '<Up>', consts.FcitxKey.up, consts.FcitxKeyState.no },
-    down = { '<Down>', consts.FcitxKey.down, consts.FcitxKeyState.no },
-    left = { '<Left>', consts.FcitxKey.left, consts.FcitxKeyState.no },
-    right = { '<Right>', consts.FcitxKey.right, consts.FcitxKeyState.no },
-    enter = { '<CR>', consts.FcitxKey.enter, consts.FcitxKeyState.no },
-    backspace = { '<BS>', consts.FcitxKey.backspace, consts.FcitxKeyState.no },
-    tab = { '<Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.no },
-    stab = { '<S-Tab>', consts.FcitxKey.tab, consts.FcitxKeyState.shift },
-  },
-  ignore_module_missing_warning = false,
-  prev = "<|",
-  next = "|>",
-  update = 50,
+local configuration = {
+        trigger = nil,
+        keymap = {
+                ['<Up>'] = { consts.FcitxKey.up, consts.FcitxKeyState.no },
+                ['<Down>'] = { consts.FcitxKey.down, consts.FcitxKeyState.no },
+                ['<Left>'] = { consts.FcitxKey.left, consts.FcitxKeyState.no },
+                ['<Right>'] = { consts.FcitxKey.right, consts.FcitxKeyState.no },
+                ['<CR>'] = { consts.FcitxKey.enter, consts.FcitxKeyState.no },
+                ['<BS>'] = { consts.FcitxKey.backspace, consts.FcitxKeyState.no },
+                ['<Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.no },
+                ['<S-Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.shift },
+        },
+        prev = "<|",
+        next = "|>",
+        update = 50,
 }
 ```
 
-You **MUST** config fcitx to `ShareInputState=No` and `trigger` **MUST** be set
+You **MUST** config fcitx to `ShareInputState=No` and `trigger` **MUST** be map
 to one of `[Hotkey/TriggerKeys]` in your fcitx config.
+
+My configuration with lazy.nvim:
+
+```lua
+local function config()
+        require("fcitx5-ui").setup({
+                trigger = '<M-Space>',
+                keymap = {
+                        ['<M-Space>'] = {
+                                require("fcitx5-ui.consts").FcitxKey.space,
+                                require("fcitx5-ui.consts").FcitxKeyState.super,
+                        }
+                }
+        })
+end
+
+return {
+        "black-desk/fcitx5-ui.nvim",
+        config = config,
+        keys = { {
+                "<M-i>",
+                function()
+                        vim.api.nvim_command('startinsert')
+                        require 'fcitx5-ui'.toggle()
+                end,
+                mode = { "n", "i" },
+                desc = "[fcitx5-ui] toggle fcitx state",
+
+        } },
+        branch = 'dev',
+        dev = true,
+}
+```
 
 ### `update`
 
