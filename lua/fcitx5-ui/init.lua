@@ -46,14 +46,15 @@ do
         ---@param name string?
         ---@param unique_name string?
         ---@param language_code string?
-        M_private.set_current_input_method_status =
-            function(name, unique_name, language_code)
-                    current_input_method_status = {
-                            name = name,
-                            user_name = unique_name,
-                            language_code = language_code,
-                    }
-            end
+        M_private.set_current_input_method_status = function(name,
+                                                             unique_name,
+                                                             language_code)
+                current_input_method_status = {
+                        name = name,
+                        user_name = unique_name,
+                        language_code = language_code,
+                }
+        end
 end
 
 --- Keep for compatibility of vim-airline.
@@ -151,7 +152,9 @@ do
                 -- It will trigger InsertCharPre again.
                 local r, c = unpack(vim.api.nvim_win_get_cursor(0))
                 vim.schedule(function()
-                        vim.api.nvim_buf_set_text(0, r - 1, c, r - 1, c, { str })
+                        vim.api.nvim_buf_set_text(
+                                0, r - 1, c, r - 1, c, { str }
+                        )
                         vim.api.nvim_win_set_cursor(0, { r, c + #str })
                 end)
         end
