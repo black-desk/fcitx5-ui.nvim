@@ -222,7 +222,13 @@ do
                                 return ""
                         end
 
-                        return aux[1][1]
+                        local result = ""
+
+                        for _, value in pairs(aux) do
+                                result = result .. value[1]
+                        end
+
+                        return result
                 end
 
                 aux_up               = getstr(aux_up)
