@@ -3,6 +3,8 @@ local consts = require("fcitx5-ui.consts")
 local M = {}
 local M_private = {}
 
+M_private.setuped = false
+
 ---Configuration of fcitx5-ui.
 ---@class fcitx5_ui_configuration
 local configuration = {
@@ -389,6 +391,8 @@ M.setup = function(config)
 
         local input_context = M_private.get_input_context()
         M_private.connect_signal_handlers(input_context)
+
+        M_private.setuped = true
 end
 
 M_private.process_key = function(input)
@@ -496,6 +500,8 @@ do
         local activated = false;
 
         M.toggle = function()
+                assert(M_private.setuped, "You must call `setup` first.")
+
                 if activated then
                         M.deactivate()
                         return
@@ -505,6 +511,8 @@ do
         end
 
         M.activate = function()
+                assert(M_private.setuped, "You must call `setup` first.")
+
                 if activated then
                         error("fcitx5-ui is already activated.")
                 end
@@ -517,6 +525,8 @@ do
         end
 
         M.deactivate = function()
+                assert(M_private.setuped, "You must call `setup` first.")
+
                 if not activated then
                         error("fcitx5-ui is not activated.")
                 end
