@@ -16,12 +16,12 @@ local configuration = {
                 ['<BS>'] = { consts.FcitxKey.backspace, consts.FcitxKeyState.no },
                 ['<Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.no },
                 ['<S-Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.shift },
+                ['<C-@>'] = { consts.FcitxKey.grave_accent, consts.FcitxKeyState.ctrl },
         },
         prev = "<|",
         next = "|>",
         update = 50,
 }
-
 do
         -- Maintain the name of current input method.
 
