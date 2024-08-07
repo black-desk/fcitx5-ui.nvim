@@ -153,12 +153,10 @@ do
                 -- Do not use `vim.api.nvim_feedkeys` here.
                 -- It will trigger InsertCharPre again.
                 local r, c = unpack(vim.api.nvim_win_get_cursor(0))
-                vim.schedule(function()
-                        vim.api.nvim_buf_set_text(
-                                0, r - 1, c, r - 1, c, { str }
-                        )
-                        vim.api.nvim_win_set_cursor(0, { r, c + #str })
-                end)
+                vim.api.nvim_buf_set_text(
+                        0, r - 1, c, r - 1, c, { str }
+                )
+                vim.api.nvim_win_set_cursor(0, { r, c + #str })
         end
 
         ---Handler of org.fcitx.Fcitx.InputContext1.ForwardKey signal.
@@ -170,6 +168,7 @@ do
         ---@diagnostic disable-next-line: unused-local
         signal_handlers.ForwardKey = function(self,
                                               key_sym, state, release)
+                vim.print("forword key: " .. key_sym)
                 if release then
                         return
                 end
@@ -184,9 +183,7 @@ do
                         key = "\\<C-" .. key .. ">"
                 end
 
-                vim.schedule(function()
-                        vim.api.nvim_feedkeys(key, 'm', true)
-                end)
+                vim.api.nvim_feedkeys(key, 'm', true)
         end
 
 
