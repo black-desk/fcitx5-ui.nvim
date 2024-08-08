@@ -434,7 +434,7 @@ do
                                 end
                         })
                 vim.api.nvim_create_autocmd(
-                        { "InsertLeave", "WinLeave" },
+                        { "InsertLeave", "WinLeave", "BufLeave" },
                         {
                                 group = "fcitx5_ui",
                                 pattern = "*",
@@ -540,6 +540,9 @@ do
 
         M_private.reset = function()
                 M_private.get_input_context():Reset()
+                if activated then
+                        M.deactivate()
+                end
                 M_private.close_window()
         end
 end
