@@ -434,7 +434,7 @@ do
                                 end
                         })
                 vim.api.nvim_create_autocmd(
-                        { "InsertLeave", "WinLeave", "BufLeave" },
+                        { "InsertLeave" },
                         {
                                 group = "fcitx5_ui",
                                 pattern = "*",
@@ -442,6 +442,17 @@ do
                                         M_private.reset()
                                 end
                         })
+                vim.api.nvim_create_autocmd(
+                        { "WinLeave", "BufLeave" },
+                        {
+                                group    = "fcitx5_ui",
+                                pattern  = "*",
+                                callback = function()
+                                        M_private.reset()
+                                        M.deactivate(true)
+                                end
+                        })
+
                 return aug
         end
 
@@ -508,10 +519,11 @@ do
                 M.activate()
         end
 
-        M.activate = function()
+        ---@param force boolean?
+        M.activate = function(force)
                 assert(M_private.setuped, "You must call `setup` first.")
 
-                if activated then
+                if (not force) and activated then
                         error("fcitx5-ui is already activated.")
                 end
 
@@ -522,10 +534,11 @@ do
                 activated = true
         end
 
-        M.deactivate = function()
+        ---@param force boolean?
+        M.deactivate = function(force)
                 assert(M_private.setuped, "You must call `setup` first.")
 
-                if not activated then
+                if (not force) and not activated then
                         error("fcitx5-ui is not activated.")
                 end
 
@@ -540,9 +553,6 @@ do
 
         M_private.reset = function()
                 M_private.get_input_context():Reset()
-                if activated then
-                        M.deactivate()
-                end
                 M_private.close_window()
         end
 end
