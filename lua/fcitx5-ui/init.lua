@@ -19,6 +19,7 @@ local configuration = {
                 ['<Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.no },
                 ['<S-Tab>'] = { consts.FcitxKey.tab, consts.FcitxKeyState.shift },
                 ['<C-@>'] = { consts.FcitxKey.grave_accent, consts.FcitxKeyState.ctrl },
+                ['<C-Space>'] = { consts.FcitxKey.grave_accent, consts.FcitxKeyState.ctrl },
         },
         prev = "<|",
         next = "|>",
