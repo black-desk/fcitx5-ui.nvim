@@ -14,11 +14,21 @@ jobs:
         run: |
           sudo apt install -y libgirepository1.0-dev
         shell: bash
-      - uses: nvim-neorocks/luarocks-tag-release@v7
+      - uses: lumen-oss/luarocks-tag-release@v7
         env:
           LUAROCKS_API_KEY: ${{secrets.LUAROCKS_API_KEY}}
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           version: scm
+          extra_luarocks_args: |
+            --force
+          dependencies: |
+            dbus_proxy
+      - uses: lumen-oss/luarocks-tag-release@v7
+        env:
+          LUAROCKS_API_KEY: ${{secrets.LUAROCKS_API_KEY}}
+        if: "! startsWith(github.ref, 'refs/tags/')"
+        with:
           extra_luarocks_args: |
             --force
           dependencies: |
