@@ -1,7 +1,8 @@
 on:
   push:
-    branches:
-      - master
+    paths-ignore:
+      - "**.md"
+      - doc/*
   workflow_dispatch:
 
 jobs:
