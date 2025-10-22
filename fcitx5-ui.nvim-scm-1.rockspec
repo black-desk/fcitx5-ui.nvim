@@ -15,7 +15,7 @@ description = {
   license = 'GPL-3.0'
 }
 
-dependencies = { 'lua >= 5.1', 'dbus_proxy' }
+dependencies = { 'lua >= 5.1', 'dbus_proxy', 'ime' }
 
 test_dependencies = { }
 

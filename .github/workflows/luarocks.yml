@@ -25,6 +25,7 @@ jobs:
             --force
           dependencies: |
             dbus_proxy
+            ime >= 0.0.4
       - uses: lumen-oss/luarocks-tag-release@v7
         env:
           LUAROCKS_API_KEY: ${{secrets.LUAROCKS_API_KEY}}
@@ -34,3 +35,4 @@ jobs:
             --force
           dependencies: |
             dbus_proxy
+            ime >= 0.0.4
