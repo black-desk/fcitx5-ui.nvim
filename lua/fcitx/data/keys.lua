@@ -1,4 +1,4 @@
----https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h,
+---https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h
 return {
     None = 0x0,
     VoidSymbol = 0xffffff,
