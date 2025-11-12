@@ -7,12 +7,9 @@ local fs = require 'ime.fs'
 local UI = require 'ime.ui'.UI
 
 local Key = require 'fcitx.key'.Key
+local capabilities = require 'fcitx.data.capabilities'
 
 local M = {
-    capabilities = {
-        ClientSideInputPanel = 2 ^ 39,
-        KeyEventOrderFix = 2 ^ 37,
-    },
     proxy = {
         bus = p.Bus.SESSION,
         name = "org.freedesktop.portal.Fcitx",
@@ -31,7 +28,7 @@ for i, modifier in ipairs(require 'fcitx.data.modifiers') do
     end
 end
 M.Fcitx = {
-    capability = M.capabilities.ClientSideInputPanel + M.capabilities.KeyEventOrderFix,
+    capability = capabilities.ClientSideInputPanel + capabilities.KeyEventOrderFix,
     proxy = {
         bus = p.Bus.SESSION,
         name = "org.freedesktop.portal.Fcitx",
