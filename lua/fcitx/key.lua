@@ -14,6 +14,17 @@ local M = {
 ---@return table
 function M.Key:new(key)
     key = key or {}
+    if key.normal_name then
+        key.code = keys[key.normal_name:match "[^+]+$"] or 0x20
+        key.mask = 0
+        for i, modifier in ipairs(modifiers) do
+            for match in key.normal_name:gmatch "([^+]+)+" do
+                if match == modifier then
+                    key.mask = key.mask + 2 ^ (i - 1)
+                end
+            end
+        end
+    end
     key = Key(key, keys, modifiers)
     setmetatable(key, {
         __index = self

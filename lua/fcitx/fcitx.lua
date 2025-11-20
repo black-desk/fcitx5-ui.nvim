@@ -2,6 +2,8 @@
 local p = require 'dbus_proxy'
 local lgi = require 'lgi'
 local uv = require 'luv'
+local inifile = require 'inifile'
+local PlatformDirs = require 'platformdirs'.PlatformDirs
 local IME = require "ime.ime".IME
 local fs = require 'ime.fs'
 local UI = require 'ime.ui'.UI
@@ -10,6 +12,7 @@ local Key = require 'fcitx.key'.Key
 local capabilities = require 'fcitx.data.capabilities'
 
 local M = {
+    config = PlatformDirs { appname = "fcitx5", version = "config" }:user_config_dir(),
     proxy = {
         bus = p.Bus.SESSION,
         name = "org.freedesktop.portal.Fcitx",
@@ -21,12 +24,6 @@ local M = {
         { "display", "fcitx5uinvim" },
     },
 }
-local mask = 0
-for i, modifier in ipairs(require 'fcitx.data.modifiers') do
-    if modifier == "Super" then
-        mask = 2 ^ (i - 1)
-    end
-end
 M.Fcitx = {
     capability = capabilities.ClientSideInputPanel + capabilities.KeyEventOrderFix,
     proxy = {
@@ -35,11 +32,11 @@ M.Fcitx = {
         interface = "org.fcitx.Fcitx.InputContext1",
     },
     interval = 50,
-    trigger = {
-        code = require 'fcitx.data.keys'.space,
-        mask = mask
-    }
 }
+local config = inifile.parse(M.config)
+if config["Hotkey/TriggerKeys"] then
+    M.Fcitx.trigger = Key { normal_name = config["Hotkey/TriggerKeys"]["0"] }
+end
 
 ---convert fcitx5 data structure to context
 ---@param preedit string[][]
@@ -104,7 +101,9 @@ function M.Fcitx:new(fcitx)
     fcitx.timer:start(fcitx.interval, fcitx.interval, function()
         lgi.GLib.MainLoop():get_context():iteration()
     end)
-    fcitx:process(fcitx.trigger.code, fcitx.trigger.mask)
+    if fcitx.trigger then
+        fcitx:process(fcitx.trigger.code, fcitx.trigger.mask)
+    end
     return fcitx
 end
 

@@ -71,24 +71,6 @@ The most config is same as
 [rime.nvim](https://github.com/rimeinn/rime.nvim#frontend).
 The only difference is trigger key which is used to switch input schema.
 
-```lua
-local Fcitx = require('fcitx.nvim.fcitx').Fcitx
-local mask = 0
-for i, modifier in ipairs(require 'fcitx.data.modifiers') do
-    if modifier == "Super" then
-        mask = 2 ^ (i - 1)
-    end
-end
-local fcitx = Fcitx{
-  trigger = {
-    code = require 'fcitx.data.keys'.space,
-    mask = mask
-  }
-}
-```
-
-By default, it is assumed as `Super + Space`:
-
 `~/.config/fcitx5/config`:
 
 ```dosini
@@ -98,6 +80,16 @@ By default, it is assumed as `Super + Space`:
 [Behavior]
 # Share Input State
 ShareInputState=No
+```
+
+By default, it will parse `~/.config/fcitx5/config`. You also can customize it.
+
+```lua
+local Fcitx = require 'fcitx.nvim.fcitx'.Fcitx
+local Key = require 'fcitx.key'.Key
+local fcitx = Fcitx{
+  trigger = Key { normal_name = "Super+space" }
+}
 ```
 
 Old APIs for compatibility:
@@ -112,10 +104,6 @@ then you can use `:startinsert` to enter insert mode.
 `require'fcitx5-ui'.getCurrentIM()` to get current IM.
 
 `require'fcitx5-ui'.setup(config)` to config this plugin.
-
-## TODO
-
-- [ ] get `Hotkey/TriggerKeys` from `~/.config/fcitx5/config`.
 
 ## Thanks
 

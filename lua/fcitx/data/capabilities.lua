@@ -38,5 +38,5 @@ local M = {
     Disable = 2 ^ 40,
     CommitStringWithCursor = 2 ^ 41,
 }
-M.PasswordOrSensitive = M.Password | M.Sensitive
+M.PasswordOrSensitive = M.Password + M.Sensitive
 return M
