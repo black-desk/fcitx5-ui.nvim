@@ -33,9 +33,14 @@ M.Fcitx = {
     },
     interval = 50,
 }
-local config = inifile.parse(M.config)
-if config["Hotkey/TriggerKeys"] then
-    M.Fcitx.trigger = Key { normal_name = config["Hotkey/TriggerKeys"]["0"] }
+local f = io.open(M.config)
+if f then
+    local text = f:read "*a"
+    f:close()
+    local config = inifile.parse(text, "memory")
+    if config["Hotkey/TriggerKeys"] and config["Hotkey/TriggerKeys"]["0"] then
+        M.Fcitx.trigger = Key { normal_name = config["Hotkey/TriggerKeys"]["0"] }
+    end
 end
 
 ---convert fcitx5 data structure to context
