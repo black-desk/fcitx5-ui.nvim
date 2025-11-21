@@ -10,7 +10,7 @@ jobs:
     name: Push master to luarocks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies.
         run: |
           sudo apt install -y libgirepository1.0-dev
