@@ -3,9 +3,9 @@ local p = require 'dbus_proxy'
 local lgi = require 'lgi'
 local uv = require 'luv'
 local inifile = require 'inifile'
+local fn = require 'vim.fn'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 local IME = require "ime.ime".IME
-local fn = require 'ime.fn'
 local UI = require 'ime.ui'.UI
 
 local Key = require 'fcitx.key'.Key
