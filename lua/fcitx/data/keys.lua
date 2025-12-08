@@ -1,3 +1,4 @@
+---don't use json due to unsupported 0xXX syntax.
 ---https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h
 return {
     None = 0x0,

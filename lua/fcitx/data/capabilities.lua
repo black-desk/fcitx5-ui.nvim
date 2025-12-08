@@ -1,3 +1,4 @@
+---don't use json due to unsupported 2^x syntax.
 ---https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/capabilityflags.h
 local M = {
     NoFlag = 0,
