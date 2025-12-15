@@ -31,11 +31,11 @@ end
 
 for i, v in ipairs(modifiers) do
     if v == "Shift" then
-        M.Key.modifiers.S = 2 ^ i
+        M.Key.modifiers.S = 2 ^ (i - 1)
     elseif v == "Control" then
-        M.Key.modifiers.C = 2 ^ i
+        M.Key.modifiers.C = 2 ^ (i - 1)
     elseif v == "Alt" then
-        M.Key.modifiers.A = 2 ^ i
+        M.Key.modifiers.A = 2 ^ (i - 1)
     end
 end
 M.Key.modifiers.M = M.Key.modifiers.A
