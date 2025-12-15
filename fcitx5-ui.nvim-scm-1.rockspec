@@ -15,7 +15,7 @@ description = {
   license = 'GPL-3.0'
 }
 
-dependencies = { 'lua >= 5.1', 'dbus_proxy', 'ime', 'platformdirs', 'inifile' }
+dependencies = { 'lua >= 5.1', 'dbus_proxy', 'ime >= 0.0.7', 'platformdirs', 'inifile' }
 
 test_dependencies = { }
 

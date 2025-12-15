@@ -25,7 +25,7 @@ jobs:
             --force
           dependencies: |
             dbus_proxy
-            ime >= 0.0.4
+            ime >= 0.0.7
             platformdirs
             inifile
       - uses: lumen-oss/luarocks-tag-release@v7
@@ -37,6 +37,6 @@ jobs:
             --force
           dependencies: |
             dbus_proxy
-            ime >= 0.0.4
+            ime >= 0.0.7
             platformdirs
             inifile
