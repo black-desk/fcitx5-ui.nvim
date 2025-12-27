@@ -1,11 +1,6 @@
 # Fcitx5 UI inside neovim
 
-**WARNING**
-This program is in very early stage and may break or change frequently\!
-
 This is a fcitx5 user interface for neovim written in lua.
-
-Basical fcitx5 functions seems work after a simple setup.
 
 ![demo](./assets/screenshot.png)
 
@@ -105,17 +100,8 @@ then you can use `:startinsert` to enter insert mode.
 
 `require'fcitx5-ui'.setup(config)` to config this plugin.
 
-## Thanks
+## Related Projects
 
-[fcitx5.nvim][==link4==]
-
-[lua-dbus\_proxy][==link5==]
-
-[fcitx.vim][==link6==]
-
-[==link1==]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysymgen.h
-[==link2==]: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx-utils/keysym.h
-[==link3==]: https://github.com/black-desk/dotfiles/blob/e0af17d86b7719bac6d3c936b9ebdf4ffc3c22af/private_dot_config/nvim/lua/plugins-d/_fcitx.lua#L6-L28
-[==link4==]: https://github.com/tonyfettes/fcitx5.nvim
-[==link5==]: https://github.com/stefano-m/lua-dbus_proxy
-[==link6==]: https://github.com/lilydjwg/fcitx.vim
+- [similar projects](https://github.com/rimeinn/ime.nvim#dbus)
+- [let vim use dbus](https://github.com/rimeinn/ime.nvim#dbus-1) to communicate
+  with fcitx in GUI
