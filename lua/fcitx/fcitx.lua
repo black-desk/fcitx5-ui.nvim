@@ -6,7 +6,7 @@ local inifile = require 'inifile'
 local fn = require 'vim.fn'
 local PlatformDirs = require 'platformdirs'.PlatformDirs
 local IME = require "ime.ime".IME
-local UI = require 'ime.ui'.UI
+local UI = require 'ime.ui.horizontal'.UI
 
 local Key = require 'fcitx.key'.Key
 local capabilities = require 'fcitx.data.capabilities'
