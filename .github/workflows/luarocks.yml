@@ -23,11 +23,7 @@ jobs:
           version: scm
           extra_luarocks_args: |
             --force
-          dependencies: |
-            dbus_proxy
-            ime >= 0.0.7
-            platformdirs
-            inifile
+          template: fcitx5-ui.nvim-scm-1.rockspec
       - uses: lumen-oss/luarocks-tag-release@v7
         env:
           LUAROCKS_API_KEY: ${{secrets.LUAROCKS_API_KEY}}
@@ -35,8 +31,4 @@ jobs:
         with:
           extra_luarocks_args: |
             --force
-          dependencies: |
-            dbus_proxy
-            ime >= 0.0.7
-            platformdirs
-            inifile
+          template: fcitx5-ui.nvim-scm-1.rockspec
