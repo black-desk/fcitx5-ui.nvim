@@ -1,12 +1,11 @@
 ---lazy load `fcitx.nvim.fcitx`
-local Fcitx = require('fcitx.nvim.fcitx').Fcitx
-
 local M = {}
 
 ---init if required
 ---@param augroup_id integer?
 function M.init(augroup_id)
     if M.ime == nil then
+        local Fcitx = require('fcitx.nvim.fcitx').Fcitx
         M.ime = Fcitx(M.fcitx)
         M.ime:create_autocmds(augroup_id)
     end
