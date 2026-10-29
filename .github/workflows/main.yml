@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get -y update
           sudo apt-get -y install libgirepository1.0-dev
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Generate extra.rockspec
         run: |
           perl -00ne 'print if $. == 2' ./*-scm-1.rockspec > extra.rockspec
