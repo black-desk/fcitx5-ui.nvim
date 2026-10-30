@@ -3,16 +3,14 @@ local p = require 'dbus_proxy'
 local lgi = require 'lgi'
 local uv = require 'luv'
 local inifile = require 'inifile'
-local fn = require 'vim.fn'
-local PlatformDirs = require 'platformdirs'.PlatformDirs
 local IME = require "ime.ime".IME
 local UI = require 'ime.ui.horizontal'.UI
+local datafile = require 'datafile'
 
 local Key = require 'fcitx.key'.Key
 local capabilities = require 'fcitx.data.capabilities'
 
 local M = {
-    config = PlatformDirs { appname = "fcitx5", version = "config" }:user_config_dir(),
     proxy = {
         bus = p.Bus.SESSION,
         name = "org.freedesktop.portal.Fcitx",
@@ -33,7 +31,7 @@ M.Fcitx = {
     },
     interval = 50,
 }
-local f = io.open(M.config)
+local f = datafile.open('fcitx5/config', 'r', 'config')
 if f then
     local text = f:read "*a"
     f:close()
@@ -137,7 +135,12 @@ end
 function M.Fcitx:main()
     self:enable()
     while true do
-        local c = fn.getchar()
+        local c
+        if vim then
+            c = vim.fn.getchar()
+        else
+            c = io.read(1):byte()
+        end
         self:call({ code = c, mask = 0 })
     end
 end

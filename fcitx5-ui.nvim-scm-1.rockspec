@@ -16,4 +16,4 @@ build = {
   copy_directories = { 'doc' } ,
 }
 
-dependencies = { 'lua >= 5.1', 'dbus_proxy', 'ime >= 0.0.8', 'platformdirs', 'inifile' }
+dependencies = { 'lua >= 5.1', 'dbus_proxy', 'ime >= 0.0.8', 'datafile', 'inifile' }
